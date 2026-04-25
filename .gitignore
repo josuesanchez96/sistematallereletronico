@@ -1,47 +1,107 @@
-# ─── Dependencias ────────────────────────────────────────────────────────────
+# =============================================================================
+# .gitignore — Plataforma Digital de Gestión Operativa para Talleres Electrónicos
+# =============================================================================
+# PRINCIPIO: ningún secreto, credencial, sesión ni dato sensible
+# debe existir jamás en el historial de este repositorio.
+# Una vez que un secreto toca el historial de git, se considera comprometido.
+# =============================================================================
+
+
+# ─── SEGURIDAD CRÍTICA: Variables de entorno y secretos ──────────────────────
+# Contienen: DATABASE_URL, JWT_SECRET, contraseñas, API keys
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# ─── SEGURIDAD CRÍTICA: Certificados y claves criptográficas ─────────────────
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_ed25519
+id_ecdsa
+*.pub
+*.ppk
+
+# ─── SEGURIDAD CRÍTICA: Sesión de WhatsApp (tokens de autenticación reales) ──
+# Contienen cookies de sesión equivalentes a credenciales de WhatsApp
+backend/.wwebjs_auth/
+backend/.wwebjs_cache/
+.wwebjs_auth/
+.wwebjs_cache/
+
+# ─── SEGURIDAD CRÍTICA: Archivos de seguridad con credenciales en texto plano ─
+# rls_ready.sql se genera localmente con contraseñas del .env, nunca se sube
+backend/prisma/security/rls_ready.sql
+
+# ─── SEGURIDAD CRÍTICA: Volcados y backups de base de datos ──────────────────
+# Pueden contener datos personales de clientes (DPI, teléfonos, órdenes)
+*.sql.gz
+*.dump
+*.bak
+*.backup
+db-dump/
+backups/
+
+# ─── SEGURIDAD: Archivos con nombres sospechosos de contener secretos ─────────
+*secret*
+*password*
+*passwd*
+*credential*
+*token*
+*apikey*
+*private*
+# Excepciones legítimas del código fuente
+!**/src/**/*secret*
+!**/src/**/*token*
+!**/src/**/*credential*
+
+
+# ─── Dependencias (nunca se versionan) ───────────────────────────────────────
 node_modules/
 **/node_modules/
-
-# ─── Variables de entorno (nunca subir secretos) ─────────────────────────────
-.env
-backend/.env
-frontend/.env
-# Mantener ejemplos como referencia
-!.env.example
-!backend/.env.example
-!frontend/.env.example
 
 # ─── Compilados y bundles ─────────────────────────────────────────────────────
 dist/
 **/dist/
 build/
+*.tsbuildinfo
 
-# ─── Logs ────────────────────────────────────────────────────────────────────
+# ─── Cliente generado por Prisma (se regenera con prisma generate) ────────────
+backend/node_modules/.prisma/
+
+# ─── Logs (pueden contener trazas con datos personales o internos) ────────────
 *.log
 *.err.log
 *.out.log
 logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# ─── WhatsApp — sesión local (contiene tokens de autenticación) ───────────────
-backend/.wwebjs_auth/
-.wwebjs_auth/
-.wwebjs_cache/
+# ─── Caché y temporales ───────────────────────────────────────────────────────
+.npm
+.eslintcache
+.cache/
+.parcel-cache/
+.turbo/
 
-# ─── Prisma — cliente generado (se regenera con prisma generate) ──────────────
-backend/node_modules/.prisma/
-
-# ─── RLS listo (archivo temporal con credenciales en texto plano) ─────────────
-backend/prisma/security/rls_ready.sql
-
-# ─── Docs — contenido interno no público ─────────────────────────────────────
+# ─── Documentación interna (no pública) ──────────────────────────────────────
 docs/
 
 # ─── Sistema operativo ───────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 desktop.ini
+ehthumbs.db
 
-# ─── Editores e IDEs ─────────────────────────────────────────────────────────
+# ─── Editores e IDEs (configuraciones locales, no del equipo) ─────────────────
 .vscode/
 .idea/
 *.suo
@@ -49,14 +109,10 @@ desktop.ini
 *.njsproj
 *.sln
 *.sw?
+.project
+.classpath
 
-# ─── Coverage y tests ────────────────────────────────────────────────────────
+# ─── Cobertura y reportes de pruebas ─────────────────────────────────────────
 coverage/
 **/coverage/
-
-# ─── Caché de herramientas ───────────────────────────────────────────────────
-.npm
-.eslintcache
-.cache/
-.parcel-cache/
-*.tsbuildinfo
+.nyc_output/
