@@ -1,82 +1,136 @@
 # =============================================================================
 # .gitignore — Plataforma Digital de Gestión Operativa para Talleres Electrónicos
 # =============================================================================
-# PRINCIPIO: ningún secreto, credencial, sesión ni dato sensible
-# debe existir jamás en el historial de este repositorio.
-# Una vez que un secreto toca el historial de git, se considera comprometido.
+#
+# PRINCIPIO DE SEGURIDAD (OWASP / GitHub Security Best Practices):
+#   "Una vez que un secreto toca el historial de git, se considera comprometido,
+#    incluso si se elimina en un commit posterior."
+#
+# Todo archivo sensible debe ignorarse ANTES de existir en el repositorio.
 # =============================================================================
 
 
-# ─── SEGURIDAD CRÍTICA: Variables de entorno y secretos ──────────────────────
-# Contienen: DATABASE_URL, JWT_SECRET, contraseñas, API keys
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 1 — SECRETOS Y VARIABLES DE ENTORNO
+# Riesgo: exposición de credenciales de base de datos, JWT_SECRET, API keys.
+# Impacto: acceso no autorizado al sistema completo.
+# ─────────────────────────────────────────────────────────────────────────────
 .env
 .env.*
+backend/.env
+frontend/.env
+# Mantener plantillas de referencia (sin valores reales)
 !.env.example
 !**/.env.example
 
-# ─── SEGURIDAD CRÍTICA: Certificados y claves criptográficas ─────────────────
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 2 — CLAVES CRIPTOGRÁFICAS Y CERTIFICADOS
+# Riesgo: filtración de claves privadas SSL/TLS, SSH o de firma de tokens.
+# Impacto: suplantación de identidad, man-in-the-middle, acceso remoto.
+# ─────────────────────────────────────────────────────────────────────────────
 *.pem
 *.key
 *.crt
 *.cer
+*.der
 *.p12
 *.pfx
 *.jks
 *.keystore
 id_rsa
+id_rsa.*
 id_ed25519
+id_ed25519.*
 id_ecdsa
+id_ecdsa.*
 *.pub
 *.ppk
+ssl/
+certs/
+certificates/
 
-# ─── SEGURIDAD CRÍTICA: Sesión de WhatsApp (tokens de autenticación reales) ──
-# Contienen cookies de sesión equivalentes a credenciales de WhatsApp
-backend/.wwebjs_auth/
-backend/.wwebjs_cache/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 3 — SESIÓN DE WHATSAPP (tokens de autenticación reales)
+# Riesgo: los archivos .wwebjs_auth contienen cookies de sesión activas.
+# Impacto: acceso total a la cuenta de WhatsApp vinculada al sistema.
+# ─────────────────────────────────────────────────────────────────────────────
 .wwebjs_auth/
 .wwebjs_cache/
+backend/.wwebjs_auth/
+backend/.wwebjs_cache/
 
-# ─── SEGURIDAD CRÍTICA: Archivos de seguridad con credenciales en texto plano ─
-# rls_ready.sql se genera localmente con contraseñas del .env, nunca se sube
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 4 — ARCHIVOS DE SEGURIDAD CON CREDENCIALES EN TEXTO PLANO
+# rls_ready.sql se genera localmente sustituyendo placeholders con contraseñas
+# reales del .env. Nunca debe existir en el repositorio.
+# ─────────────────────────────────────────────────────────────────────────────
 backend/prisma/security/rls_ready.sql
 
-# ─── SEGURIDAD CRÍTICA: Volcados y backups de base de datos ──────────────────
-# Pueden contener datos personales de clientes (DPI, teléfonos, órdenes)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 5 — VOLCADOS Y BACKUPS DE BASE DE DATOS
+# Riesgo: contienen datos personales de clientes (DPI, teléfonos, órdenes).
+# Impacto: violación de privacidad, incumplimiento normativo (GDPR / Ley local).
+# ─────────────────────────────────────────────────────────────────────────────
 *.sql.gz
 *.dump
 *.bak
 *.backup
 db-dump/
 backups/
+exports/
 
-# ─── SEGURIDAD: Archivos con nombres sospechosos de contener secretos ─────────
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 6 — PREVENCIÓN POR NOMBRE (archivos con apariencia de secreto)
+# Bloquea cualquier archivo cuyo nombre sugiera que contiene credenciales.
+# Las excepciones protegen el código fuente legítimo que menciona estos términos.
+# ─────────────────────────────────────────────────────────────────────────────
 *secret*
 *password*
 *passwd*
 *credential*
-*token*
 *apikey*
-*private*
-# Excepciones legítimas del código fuente
+*api_key*
+*private_key*
+# Excepciones: código fuente que referencia estos conceptos (interfaces, DTOs)
 !**/src/**/*secret*
 !**/src/**/*token*
 !**/src/**/*credential*
+!**/src/**/*password*
 
 
-# ─── Dependencias (nunca se versionan) ───────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 7 — DOCUMENTACIÓN INTERNA (no pública)
+# Contiene información operativa, propuestas y bitácoras del proyecto.
+# ─────────────────────────────────────────────────────────────────────────────
+docs/
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 8 — DEPENDENCIAS (nunca se versionan)
+# ─────────────────────────────────────────────────────────────────────────────
 node_modules/
 **/node_modules/
 
-# ─── Compilados y bundles ─────────────────────────────────────────────────────
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 9 — COMPILADOS Y ARTEFACTOS DE BUILD
+# ─────────────────────────────────────────────────────────────────────────────
 dist/
 **/dist/
 build/
 *.tsbuildinfo
-
-# ─── Cliente generado por Prisma (se regenera con prisma generate) ────────────
 backend/node_modules/.prisma/
 
-# ─── Logs (pueden contener trazas con datos personales o internos) ────────────
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 10 — LOGS (pueden contener trazas con datos personales o rutas internas)
+# Riesgo: los logs pueden revelar stack traces, IPs, usuarios o estructura interna.
+# ─────────────────────────────────────────────────────────────────────────────
 *.log
 *.err.log
 *.out.log
@@ -85,23 +139,31 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# ─── Caché y temporales ───────────────────────────────────────────────────────
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 11 — CACHÉ Y ARCHIVOS TEMPORALES
+# ─────────────────────────────────────────────────────────────────────────────
 .npm
 .eslintcache
 .cache/
 .parcel-cache/
 .turbo/
+*.tmp
+*.temp
 
-# ─── Documentación interna (no pública) ──────────────────────────────────────
-docs/
 
-# ─── Sistema operativo ───────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 12 — SISTEMA OPERATIVO
+# ─────────────────────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 desktop.ini
 ehthumbs.db
 
-# ─── Editores e IDEs (configuraciones locales, no del equipo) ─────────────────
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 13 — EDITORES E IDEs (configuraciones locales del desarrollador)
+# ─────────────────────────────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.suo
@@ -112,7 +174,10 @@ ehthumbs.db
 .project
 .classpath
 
-# ─── Cobertura y reportes de pruebas ─────────────────────────────────────────
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BLOQUE 14 — COBERTURA Y REPORTES DE PRUEBAS
+# ─────────────────────────────────────────────────────────────────────────────
 coverage/
 **/coverage/
 .nyc_output/

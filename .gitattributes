@@ -1,27 +1,116 @@
-# Normalizar saltos de linea: checkout en estilo del OS, almacenar en LF
+# =============================================================================
+# .gitattributes — Plataforma Digital de Gestión Operativa para Talleres Electrónicos
+# =============================================================================
+#
+# PROPÓSITO DE SEGURIDAD Y CONSISTENCIA:
+#   1. Normalizar saltos de línea (LF) para evitar falsos positivos en diffs
+#      que podrían ocultar cambios maliciosos entre líneas.
+#   2. Marcar archivos binarios para prevenir corrupción y diffs ilegibles
+#      que podrían esconder contenido no autorizado.
+#   3. Garantizar que el código se vea igual en todos los sistemas operativos
+#      (Windows, Linux, macOS), eliminando inconsistencias de entorno.
+#
+# PRINCIPIO: la trazabilidad del código depende de diffs limpios y legibles.
+# Un diff corrupto por saltos de línea mixtos dificulta la revisión de seguridad.
+# =============================================================================
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# REGLA BASE — Detección automática de tipo de archivo
+# Git decide si el archivo es texto o binario antes de aplicar reglas específicas
+# ─────────────────────────────────────────────────────────────────────────────
 * text=auto
 
-# Forzar LF en archivos de código fuente
-*.ts text eol=lf
-*.tsx text eol=lf
-*.js text eol=lf
-*.mjs text eol=lf
-*.json text eol=lf
-*.md text eol=lf
-*.yml text eol=lf
-*.yaml text eol=lf
-*.sql text eol=lf
-*.html text eol=lf
-*.css text eol=lf
-*.env.example text eol=lf
-Dockerfile text eol=lf
-.gitignore text eol=lf
-.prettierrc text eol=lf
 
-# Binarios — sin conversión
-*.png binary
-*.jpg binary
-*.svg binary
-*.ico binary
-*.xlsx binary
-*.webp binary
+# ─────────────────────────────────────────────────────────────────────────────
+# CÓDIGO FUENTE — Forzar LF (estándar POSIX / Linux / servidores)
+# Garantiza que los diffs sean legibles en revisiones de seguridad (code review)
+# ─────────────────────────────────────────────────────────────────────────────
+*.ts        text eol=lf
+*.tsx       text eol=lf
+*.js        text eol=lf
+*.mjs       text eol=lf
+*.cjs       text eol=lf
+*.json      text eol=lf
+*.jsonc     text eol=lf
+*.html      text eol=lf
+*.css       text eol=lf
+*.scss      text eol=lf
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# INFRAESTRUCTURA Y CONFIGURACIÓN
+# Archivos críticos para el despliegue seguro del sistema
+# ─────────────────────────────────────────────────────────────────────────────
+*.yml       text eol=lf
+*.yaml      text eol=lf
+Dockerfile  text eol=lf
+*.dockerfile text eol=lf
+*.nginx     text eol=lf
+nginx.conf  text eol=lf
+*.conf      text eol=lf
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BASE DE DATOS Y SEGURIDAD
+# SQL y scripts de seguridad requieren LF para ejecución consistente en Linux
+# ─────────────────────────────────────────────────────────────────────────────
+*.sql       text eol=lf
+*.prisma    text eol=lf
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SCRIPTS
+# ─────────────────────────────────────────────────────────────────────────────
+*.sh        text eol=lf
+*.py        text eol=lf
+*.bash      text eol=lf
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DOCUMENTACIÓN Y CONFIGURACIÓN DE PROYECTO
+# ─────────────────────────────────────────────────────────────────────────────
+*.md        text eol=lf
+*.txt       text eol=lf
+*.env.example text eol=lf
+.gitignore  text eol=lf
+.gitattributes text eol=lf
+.prettierrc text eol=lf
+.eslintrc   text eol=lf
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ARCHIVOS BINARIOS — Sin conversión de líneas ni interpretación de contenido
+# Marcarlos como binario previene corrupción y diffs ilegibles que podrían
+# ocultar cambios no autorizados en activos del proyecto
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Imágenes
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.bmp   binary
+*.ico   binary
+*.webp  binary
+*.svg   binary
+
+# Fuentes tipográficas
+*.ttf   binary
+*.otf   binary
+*.woff  binary
+*.woff2 binary
+
+# Documentos ofimáticos
+*.xlsx  binary
+*.xls   binary
+*.docx  binary
+*.doc   binary
+*.pdf   binary
+
+# Archivos comprimidos
+*.zip   binary
+*.gz    binary
+*.tar   binary
+*.rar   binary
+*.7z    binary
