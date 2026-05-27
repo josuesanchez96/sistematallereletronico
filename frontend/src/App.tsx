@@ -213,7 +213,7 @@ function Login({ onLogin }: { onLogin: (session: Session) => void }) {
   const submit = async (event: React.FormEvent) => {
     event.preventDefault()
     try {
-      const { data } = await axios.post(`${API_URL}/auth/login`, { username, password })
+      const { data } = await axios.post(`${API_URL}/auth/login`, { username: username.toLowerCase().trim(), password })
       localStorage.setItem('session', JSON.stringify(data))
       onLogin(data)
     } catch {
@@ -230,7 +230,7 @@ function Login({ onLogin }: { onLogin: (session: Session) => void }) {
         </div>
         <label className="mb-3 block text-sm font-bold">
           Usuario
-          <input className="field mt-1" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input className="field mt-1" style={{ textTransform: 'none' }} value={username} onChange={(e) => setUsername(e.target.value)} />
         </label>
         <label className="mb-4 block text-sm font-bold">
           Contrasena
