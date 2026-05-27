@@ -17,7 +17,11 @@ import {
   Wrench,
 } from 'lucide-react'
 
-const API_URL = import.meta.env.VITE_API_URL ?? `${location.protocol}//${location.hostname}:3000/api`
+const API_URL = import.meta.env.VITE_API_URL || (
+  location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+    ? `${location.protocol}//${location.hostname}:3000/api`
+    : '/api'
+)
 const PUBLIC_FRONTEND_URL = import.meta.env.VITE_PUBLIC_FRONTEND_URL ?? location.origin
 
 type Session = {
