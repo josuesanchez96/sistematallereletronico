@@ -21,21 +21,21 @@ async function main() {
   const target = process.argv[2] ?? 'local';
   const appUser = required('DB_APP_USER');
   const appPassword = required('DB_APP_PASSWORD');
-  const sqlTemplate = readFileSync(join(__dirname, '..', 'prisma', 'security', 'rls.sql'), 'utf8');
+  const sqlTemplate = readFileSync(join(process.cwd(), 'prisma', 'security', 'rls.sql'), 'utf8');
   const sql = sqlTemplate
     .replaceAll('__APP_USER__', quoteIdentifier(appUser))
     .replaceAll('__APP_USER_NAME__', quoteLiteral(appUser))
     .replaceAll('__APP_PASSWORD_TEXT__', quoteLiteral(appPassword));
   if (process.platform === 'win32') {
     execFileSync('cmd.exe', ['/d', '/s', '/c', 'npx prisma db execute --stdin --schema prisma/schema.prisma'], {
-      cwd: join(__dirname, '..'),
+      cwd: process.cwd(),
       input: sql,
       stdio: ['pipe', 'inherit', 'inherit'],
       env: process.env,
     });
   } else {
     execFileSync('npx', ['prisma', 'db', 'execute', '--stdin', '--schema', 'prisma/schema.prisma'], {
-      cwd: join(__dirname, '..'),
+      cwd: process.cwd(),
       input: sql,
       stdio: ['pipe', 'inherit', 'inherit'],
       env: process.env,
