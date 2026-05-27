@@ -10,6 +10,11 @@ export class PublicController {
     private readonly prisma: PrismaService,
   ) {}
 
+  @Get('health')
+  health() {
+    return { status: 'ok' };
+  }
+
   @Get('tracking/:orderCode')
   tracking(@Param('orderCode') orderCode: string, @Query('token') token: string) {
     return this.core.tracking(orderCode, token);
