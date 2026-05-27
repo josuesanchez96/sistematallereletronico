@@ -18,10 +18,11 @@ Sistema web full-stack para administrar talleres electronicos: clientes, equipos
 docker compose up -d postgres
 ```
 
-2. Crear tablas y datos iniciales:
+2. Instalar dependencias del backend y crear tablas/datos iniciales:
 
 ```bash
 cd backend
+npm install
 npm run prisma:migrate -- --name init
 npm run prisma:seed
 npm run security:db:local
@@ -33,10 +34,11 @@ npm run security:db:local
 npm run start:dev
 ```
 
-4. Iniciar frontend en otra terminal:
+4. Instalar dependencias e iniciar frontend en otra terminal:
 
 ```bash
 cd frontend
+npm install
 npm run dev
 ```
 
