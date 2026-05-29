@@ -956,8 +956,8 @@ function Whatsapp({ api, onMessage, onOpenInbox }: { api: ReturnType<typeof useA
             <button
               className="btn btn-secondary disabled:cursor-not-allowed disabled:opacity-60"
               onClick={stopLinkedSession}
-              disabled={!status.started && !status.ready}
-              title={status.started || status.ready ? 'Desvincular el numero actual y limpiar la sesion guardada.' : 'No hay un numero vinculado para desvincular.'}
+              disabled={!status.started && !status.ready && !status.lastError}
+              title={status.started || status.ready || status.lastError ? 'Desvincular el numero actual y limpiar la sesion guardada.' : 'No hay un numero vinculado para desvincular.'}
             >
               <X className="h-4 w-4" />
               Desvincular
