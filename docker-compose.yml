@@ -25,11 +25,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    env_file:
+      - ./backend/.env
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/talleres_electronicos?schema=public
-      APP_DATABASE_URL: postgresql://talleres_app:talleres_app_local_unsafe_change_me@postgres:5432/talleres_electronicos?schema=public
-      DB_APP_USER: talleres_app
-      DB_APP_PASSWORD: talleres_app_local_unsafe_change_me
       NODE_ENV: production
       HOST: "0.0.0.0"
       JWT_SECRET: desarrollo-plataforma-talleres-electronicos-cambie-en-produccion
