@@ -2,7 +2,7 @@ FROM node:24-bookworm-slim AS build
 
 WORKDIR /app
 ENV PUPPETEER_SKIP_DOWNLOAD=true
-ENV NODE_OPTIONS="--max-old-space-size=2048"
+ENV NODE_OPTIONS="--max-old-space-size=1024"
 COPY package*.json ./
 COPY scripts ./scripts
 RUN npm ci --include=dev --ignore-scripts --prefer-offline --no-audit
