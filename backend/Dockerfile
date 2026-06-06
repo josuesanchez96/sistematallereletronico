@@ -2,9 +2,10 @@ FROM node:24-bookworm-slim AS build
 
 WORKDIR /app
 ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV NODE_OPTIONS="--max-old-space-size=2048"
 COPY package*.json ./
 COPY scripts ./scripts
-RUN npm ci --include=dev
+RUN npm ci --include=dev --ignore-scripts --prefer-offline --no-audit
 COPY prisma ./prisma
 RUN npx prisma generate
 COPY . .
@@ -23,7 +24,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
-RUN npm ci --omit=dev --ignore-scripts
+RUN npm ci --omit=dev --ignore-scripts --prefer-offline --no-audit
 RUN npm install -g ts-node typescript
 COPY scripts ./scripts
 COPY --from=build /app/dist ./dist
