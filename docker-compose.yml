@@ -37,7 +37,6 @@ services:
       FRONTEND_URL: http://localhost
       FRONTEND_URLS: http://localhost,http://127.0.0.1
       PUBLIC_FRONTEND_URL: http://localhost
-      HOST: 0.0.0.0
       PORT: 3000
       PUPPETEER_SKIP_DOWNLOAD: "true"
       CHROME_EXECUTABLE_PATH: /usr/bin/chromium
