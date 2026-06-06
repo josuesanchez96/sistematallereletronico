@@ -191,3 +191,9 @@ coverage/
 docx_render_marco/
 docx_render_marco_v1/
 scripts/generar_marco_teorico_docx.py
+
+
+# -----------------------------------------------------------------------------
+# BLOQUE 16 — DOCKER COMPOSE OVERRIDE
+# -----------------------------------------------------------------------------
+docker-compose.override.yml
